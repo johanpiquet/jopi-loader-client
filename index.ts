@@ -1,10 +1,14 @@
 import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
+import "jopi-node-space";
+
+const nWebSocket = NodeSpace.webSocket;
 
 let gIsSourceWatchingEnabled: boolean|undefined;
 let gIsBrowserRefreshEnabled: boolean|undefined;
 let gWebSocketUrl: string|undefined;
 let gRefreshHtmlSnippet: string|undefined;
+let gWebSocket: WebSocket|undefined;
 
 export function isSourceWatchingEnabled(): boolean {
     if (gIsSourceWatchingEnabled===undefined) {
@@ -30,6 +34,12 @@ function getWebSocketUrl(): string {
     return gWebSocketUrl!;
 }
 
+async function getWebSocket(): Promise<WebSocket> {
+    if (gWebSocket) return gWebSocket;
+
+    return await nWebSocket.openConnection(getWebSocketUrl());
+}
+
 export function getBrowserRefreshHtmlSnippet() {
     if (gRefreshHtmlSnippet) return gRefreshHtmlSnippet;
 
@@ -43,4 +53,28 @@ export function getBrowserRefreshHtmlSnippet() {
     gRefreshHtmlSnippet = `<script type="text/javascript">${scriptFile}</script>`;
 
     return gRefreshHtmlSnippet;
+}
+
+export function mustWaitServerReady() {
+    if (!isBrowserRefreshEnabled()) return;
+
+    getWebSocket().then((ws) => {
+        nWebSocket.sendMessage(ws, "mustWaitServerReady");
+    });
+}
+
+export function askRefreshingBrowser() {
+    if (!isBrowserRefreshEnabled()) return;
+
+    getWebSocket().then((ws) => {
+        nWebSocket.sendMessage(ws, "askRefreshingBrowser");
+    });
+}
+
+export function declareServerReady() {
+    if (!isBrowserRefreshEnabled()) return;
+
+    getWebSocket().then((ws) => {
+        nWebSocket.sendMessage(ws, "declareServerReady");
+    });
 }
