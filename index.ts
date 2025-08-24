@@ -1,9 +1,10 @@
 import {readFileSync} from "node:fs";
+import {fileURLToPath} from "node:url";
 
 let gIsSourceWatchingEnabled: boolean|undefined;
 let gIsBrowserRefreshEnabled: boolean|undefined;
 let gWebSocketUrl: string|undefined;
-let gRefreshHtmlSnipped: string|undefined;
+let gRefreshHtmlSnippet: string|undefined;
 
 export function isSourceWatchingEnabled(): boolean {
     if (gIsSourceWatchingEnabled===undefined) {
@@ -15,14 +16,14 @@ export function isSourceWatchingEnabled(): boolean {
 
 export function isBrowserRefreshEnabled(): boolean {
     if (gIsBrowserRefreshEnabled===undefined) {
-        gIsSourceWatchingEnabled = process.env.JOPIN_BROWSER_REFRESH_ENABLED === '1';
+        gIsBrowserRefreshEnabled = process.env.JOPIN_BROWSER_REFRESH_ENABLED === '1';
     }
 
     return gIsBrowserRefreshEnabled!;
 }
 
 function getWebSocketUrl(): string {
-    if (getWebSocketUrl===undefined) {
+    if (gWebSocketUrl===undefined) {
         gWebSocketUrl = process.env.JOPIN_WEBSOCKET_URL;
     }
 
@@ -30,11 +31,16 @@ function getWebSocketUrl(): string {
 }
 
 export function getBrowserRefreshHtmlSnippet() {
-    if (gRefreshHtmlSnipped) return gRefreshHtmlSnipped;
+    if (gRefreshHtmlSnippet) return gRefreshHtmlSnippet;
 
-    let scriptFile = readFileSync(import.meta.resolve("./deps/browserRefreshScript.js"), "utf8");
+    let filePath = import.meta.resolve("./deps/browserRefreshScript.js");
+    filePath = fileURLToPath(filePath);
+    let scriptFile = readFileSync(filePath, "utf8");
+
     scriptFile = scriptFile.replaceAll("JOPIN_WEBSOCKET_URL", getWebSocketUrl());
-    gRefreshHtmlSnipped = `<script type="text/javascript">${scriptFile}</script>`;
+    scriptFile = scriptFile.replace("export {};", "");
 
-    return gRefreshHtmlSnipped;
+    gRefreshHtmlSnippet = `<script type="text/javascript">${scriptFile}</script>`;
+
+    return gRefreshHtmlSnippet;
 }

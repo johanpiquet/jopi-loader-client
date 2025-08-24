@@ -2,44 +2,27 @@
 // It allows doing automatic refresh.
 
 (function() {
-    function retry() {
-        if (isRetryAsked) return;
-        isRetryAsked = true;
+    const ws = new WebSocket("JOPIN_WEBSOCKET_URL");
 
-        setTimeout(() => { tryOpenSocket() }, retryDelay);
+    ws.onopen = function () {
+        console.log("Jopi Loader - Connection open");
     }
 
-    function tryOpenSocket() {
-        isRetryAsked = false;
-
-        retryDelay += 100;
-        if (retryDelay>1000) retryDelay = 1000;
-
-        //console.clear();
-        console.log("Retry, delay:", retryDelay);
-
-        const ws = new WebSocket(wsUrl);
-
-        ws.onopen = function () {
-            console.clear();
-            if (mustRefreshOnOpen) window.location.reload();
-        }
-
-        ws.onclose = function () {
-            mustRefreshOnOpen = true;
-            retry();
-        }
-
-        ws.onerror = function () {
-            console.clear();
-            retry();
-        }
+    ws.onclose = function () {
+        console.log("Jopi Loader - Connection closed");
     }
 
-    let mustRefreshOnOpen = false;
-    let retryDelay = 500;
-    let isRetryAsked = false;
+    ws.onerror = function () {
+        console.log("Jopi Loader - Connection error");
+    }
 
-    const wsUrl = window.location.origin + "/jopi-autorefresh-rkrkrjrktht/wssocket";
-    tryOpenSocket();
+    ws.onmessage = (e) => {
+        let msg = e.data;
+
+        if (msg==="browser-refresh-asked") {
+            window.location.reload();
+        }
+    }
 })();
+
+console.log("Inside the injected script");
