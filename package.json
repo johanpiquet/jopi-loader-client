@@ -1,6 +1,6 @@
 {
   "name": "@jopi-loader/client",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "private": false,
   "license": "MIT",
   "keywords": ["loader"],
@@ -17,7 +17,7 @@
 
   "scripts": {
     "tsc": "npx tsc",
-    "bun-publish": "bun publish"
+    "bun-publish": "npx tsc && bun publish"
   },
 
   "devDependencies": {
@@ -25,6 +25,6 @@
   },
 
   "dependencies": {
-    "jopi-node-space": "workspace: *"
+    "jopi-node-space": "workspace:*"
   }
 }
