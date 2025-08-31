@@ -28,7 +28,8 @@ function getWebSocketUrl() {
 async function getWebSocket() {
     if (gWebSocket)
         return gWebSocket;
-    return await nWebSocket.openConnection(getWebSocketUrl());
+    gWebSocket = await nWebSocket.openConnection(getWebSocketUrl());
+    return gWebSocket;
 }
 export function declareApplicationStopping() {
     if (gWebSocket) {

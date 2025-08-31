@@ -37,7 +37,8 @@ function getWebSocketUrl(): string {
 async function getWebSocket(): Promise<WebSocket> {
     if (gWebSocket) return gWebSocket;
 
-    return await nWebSocket.openConnection(getWebSocketUrl());
+    gWebSocket = await nWebSocket.openConnection(getWebSocketUrl());
+    return gWebSocket;
 }
 
 export function declareApplicationStopping() {
