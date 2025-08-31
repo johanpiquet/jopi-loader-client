@@ -30,6 +30,11 @@ async function getWebSocket() {
         return gWebSocket;
     return await nWebSocket.openConnection(getWebSocketUrl());
 }
+export function declareApplicationStopping() {
+    if (gWebSocket) {
+        gWebSocket.close();
+    }
+}
 export function getBrowserRefreshHtmlSnippet() {
     if (gRefreshHtmlSnippet)
         return gRefreshHtmlSnippet;
