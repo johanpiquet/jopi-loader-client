@@ -6,3 +6,7 @@ export declare function getBrowserRefreshHtmlSnippet(): string;
 export declare function mustWaitServerReady(): void;
 export declare function askRefreshingBrowser(): void;
 export declare function declareServerReady(): void;
+/**
+ * Returns a hash which is used for asset name generation.
+ */
+export declare function getAssetsHash(): string;

@@ -1,5 +1,6 @@
 import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
+import process from 'node:process';
 import "jopi-node-space";
 
 const nWebSocket = NodeSpace.webSocket;
@@ -85,3 +86,15 @@ export function declareServerReady() {
         nWebSocket.sendMessage(ws, "declareServerReady");
     });
 }
+
+/**
+ * Returns a hash which is used for asset name generation.
+ */
+export function getAssetsHash() {
+    return gAssetHash;
+}
+
+// Allow it to be uniq even if the loader is in his own worker
+// (which doesn't allow random value)
+let gAssetHash = process.env.JOPI_RESOURCE_HASH || process.pid.toString(16).toUpperCase();
+//let gAssetHash = "MYHASH";

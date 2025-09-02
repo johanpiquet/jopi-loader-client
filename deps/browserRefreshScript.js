@@ -18,6 +18,5 @@
         }
     };
 })();
-console.log("Inside the injected script");
 export {};
 //# sourceMappingURL=browserRefreshScript.js.map

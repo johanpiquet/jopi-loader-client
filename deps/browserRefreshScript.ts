@@ -24,5 +24,3 @@
         }
     }
 })();
-
-console.log("Inside the injected script");
