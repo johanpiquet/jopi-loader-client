@@ -25,6 +25,6 @@
   },
 
   "dependencies": {
-    "jopi-node-space": "workspace:^0.0.15"
+    "jopi-node-space": "workspace:^0.0.16"
   }
 }
