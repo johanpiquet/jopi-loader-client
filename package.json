@@ -17,7 +17,8 @@
 
   "scripts": {
     "tsc": "npx tsc",
-    "bun-publish": "npx tsc && bun publish"
+    "bun-publish": "npx tsc && bun publish",
+    "clean": "rm -rf ./dist; rm -rf .turbo; rm tsconfig.tsbuildinfo"
   },
 
   "devDependencies": {

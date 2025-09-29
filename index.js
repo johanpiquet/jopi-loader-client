@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import process from 'node:process';
-import "jopi-node-space";
+import NodeSpace from "jopi-node-space";
 const nWebSocket = NodeSpace.webSocket;
 let gIsSourceWatchingEnabled;
 let gIsBrowserRefreshEnabled;
